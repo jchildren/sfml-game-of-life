@@ -6,11 +6,19 @@
 
 int main {
 
-  sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
+  const unsigned screen_width = 800;
+  const unsigned screen_height = 600;
+
+  const unsigned title_size = 10;
+
+
+
+
+  sf::RenderWindow window(sf::VideoMode(screen_width, screen_height), "Also the game");
 
   // create a 500x500 render-texture
   sf::RenderTexture renderTexture;
-  if (!renderTexture.create(500, 500))
+  if (!renderTexture.create(screen_width, screen_height))
   {
     // error...
   }

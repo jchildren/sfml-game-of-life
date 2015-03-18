@@ -12,11 +12,10 @@ public:
   MatrixXi getGrid(){ return m_currentCells; };
 
 private:
-  unsigned m_width;
-  unsigned m_height;
+  const unsigned m_width;
+  const unsigned m_height;
   MatrixXi m_currentCells;
   MatrixXi m_nextCells;
-  int Grid::m_totalY(unsigned x, unsigned y);
   void m_sumNeighbours(unsigned x, unsigned y);
 
 };
@@ -24,24 +23,6 @@ private:
 void Grid::Grid(unsigned m_width, unsigned m_height){
   currentCells.resize(m_width, m_height);
   nextCells.resize(m_width, m_height);
-}
-
-int Grid::m_totalY(unsigned x, unsigned y){
-
-  int y_total = 0;
-
-  if (y != m_height && y != 0){
-    y_total += m_totalNeighbours(x, y + 1);
-    y_total += m_totalNeighbours(x, y - 1);
-  }
-  else if (y == 0){
-    y_total += m_totalNeighbours(x, y + 1);
-    y_total += m_totalNeighbours(x, m_height);
-  }
-  else if (y == m_height){
-    y_total += m_totalNeighbours(x, 1);
-    y_total += m_totalNeighbours(x, y - 1);
-  }
 }
 
 int Grid::m_totalNeighbours(unsigned x, unsigned y){
@@ -61,7 +42,18 @@ int Grid::m_totalNeighbours(unsigned x, unsigned y){
     total += m_totalNeighbours(x + 1, y);
   }
 
-  total += m_totalY(x, y);
+  if (y != m_height && y != 0){
+    total += m_totalNeighbours(x, y + 1);
+    total += m_totalNeighbours(x, y - 1);
+  }
+  else if (y == 0){
+    total += m_totalNeighbours(x, y + 1);
+    total += m_totalNeighbours(x, m_height);
+  }
+  else if (y == m_height){
+    y_total += m_totalNeighbours(x, 1);
+    total += m_totalNeighbours(x, y - 1);
+  }
 
   return total;
 }
@@ -91,6 +83,9 @@ void Grid::step(){
         //reproduction
         if (m_totalNeighbours(i, j) == 3){
           m_nextCells(i, j) = 1; //alive
+        }
+        else {
+          m_nextCells(i, j) = 0; //dead
         }
       }
     }
