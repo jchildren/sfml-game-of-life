@@ -1,1 +1,0 @@
-/home/john/Projects/sfml-game-of-life/build/CMakeFiles/game_of_life.dir
