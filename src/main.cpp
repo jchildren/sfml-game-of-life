@@ -6,22 +6,18 @@
 
 int main {
 
-  const unsigned screen_width = 800;
-  const unsigned screen_height = 600;
+  const unsigned screenWidth = 800;
+  const unsigned screenHeight = 600;
 
-  const unsigned title_size = 10;
+  const unsigned titleSize = 10;
 
-
+  grid gameOfLife(80, 60);
 
 
   sf::RenderWindow window(sf::VideoMode(screen_width, screen_height), "Also the game");
 
-  // create a 500x500 render-texture
-  sf::RenderTexture renderTexture;
-  if (!renderTexture.create(screen_width, screen_height))
-  {
-    // error...
-  }
+
+  TileMap map(sf::Vector2u(tileSize, tileSize), screenWidth, screenHeight);
 
   // run the program as long as the window is open
   while (window.isOpen()){
@@ -33,18 +29,10 @@ int main {
         window.close();
     }
 
-    // clear the window with white color
-    renderTexture.clear(sf::Color::White);
+    map.update(gameOfLife.step());
 
-    // draw everything here...
-    // window.draw(...);
-
-    // end the current frame
-    renderTexture.display();
-
-    // Draw the texture
-    sf::Sprite sprite(renderTexture.getTexture());
-    window.draw(sprite);
+    window.clear();
+    window.draw(map);
     // End the current frame and display its contents on screen
     window.display();
 

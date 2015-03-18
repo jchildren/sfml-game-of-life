@@ -8,8 +8,7 @@ class Grid {
 public:
   void Grid(unsigned m_width, unsigned m_height);
   ~void Grid();
-  void step();
-  MatrixXi getGrid(){ return m_currentCells; };
+  MatrixXi step();
 
 private:
   const unsigned m_width;
@@ -58,7 +57,7 @@ int Grid::m_totalNeighbours(unsigned x, unsigned y){
   return total;
 }
 
-void Grid::step(){
+MatrixXi Grid::step(){
   for (unsigned i=0; i < m_width; ++i){
     for (unsigned j=0; j < m_height; ++j){
 
@@ -91,6 +90,8 @@ void Grid::step(){
     }
   }
   m_currentCells = m_nextCells;
+
+  return m_currentCells;
 
 }
 
