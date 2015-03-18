@@ -1,13 +1,17 @@
 //TileMap.hpp
 //modified version of example at http://www.sfml-dev.org/tutorials/2.2/graphics-vertex-array.php
 
-#include <Eigen/Core>
+#ifndef TILEMAP_H
+#define TILEMAP_H
+
+#include <SFML/Graphics.hpp>
+#include <eigen3/Eigen/Core>
 
 class TileMap : public sf::Drawable, public sf::Transformable{
 public:
 
-  void TileMap(sf::Vector2u tileSize, unsigned int screenWidth, unsigned int screenHeight);
-  void ~TileMap();
+  TileMap(sf::Vector2u tileSize, unsigned int screenWidth, unsigned int screenHeight);
+  ~TileMap();
   void update();
 
 private:
@@ -18,7 +22,7 @@ private:
   sf::VertexArray m_vertices;
 };
 
-void TileMap::TileMap(sf::Vector2u tileSize, unsigned int screenWidth, unsigned int screenHeight){
+TileMap::TileMap(sf::Vector2u tileSize, unsigned int screenWidth, unsigned int screenHeight){
 
   m_width = screenWidth / tileSize.x;
   m_height = screenHeight / tileSize.y;
@@ -34,7 +38,7 @@ void TileMap::TileMap(sf::Vector2u tileSize, unsigned int screenWidth, unsigned 
 void TileMap::update(MatrixXi* grid){
 
   // populate the vertex array, with one quad per tile
-  for (unsigned int i = 0; i < m_width; ++i)
+  for (unsigned int i = 0; i < m_width; ++i){
     for (unsigned int j = 0; j < m_height; ++j){
 
       // get a pointer to the current tile's quad
@@ -62,7 +66,8 @@ void TileMap::update(MatrixXi* grid){
         quad[3].color = sf::Color::Yellow;
       }
 
-
+    }
+  }
 }
 
 
@@ -73,3 +78,5 @@ virtual void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) co
   // draw the vertex array
   target.draw(m_vertices, states);
 }
+
+#endif

@@ -1,20 +1,21 @@
 //main.cpp
 
-#include <Eigen/Core>
+#include <eigen3/Eigen/Core>
 #include <SFML/Window.hpp>
-#include <SFML/Graphics.cpp>
+#include <SFML/Graphics.hpp>
+#include "grid.hpp"
+#include "tilemap.hpp"
+
+const unsigned screenWidth = 800;
+const unsigned screenHeight = 600;
+
+const unsigned titleSize = 10;
 
 int main {
 
-  const unsigned screenWidth = 800;
-  const unsigned screenHeight = 600;
-
-  const unsigned titleSize = 10;
-
   grid gameOfLife(80, 60);
 
-
-  sf::RenderWindow window(sf::VideoMode(screen_width, screen_height), "Also the game");
+  sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Also the game");
 
 
   TileMap map(sf::Vector2u(tileSize, tileSize), screenWidth, screenHeight);

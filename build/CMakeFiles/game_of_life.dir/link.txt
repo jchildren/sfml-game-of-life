@@ -1,0 +1,1 @@
+/usr/bin/c++    -Wall -Wextra -pedantic -std=c++11    CMakeFiles/game_of_life.dir/src/main.cpp.o  -o game_of_life.exe -rdynamic /usr/local/lib/libsfml-graphics.so /usr/local/lib/libsfml-window.so /usr/local/lib/libsfml-system.so -Wl,-rpath,/usr/local/lib: 

@@ -1,57 +1,79 @@
 #ifndef GRID_H
 #define GRID_H
 
-
-#include <Eigen/Core>
+#include <fstream>
+#include <eigen3/Eigen/Core>
 
 class Grid {
 public:
-  void Grid(unsigned m_width, unsigned m_height);
-  ~void Grid();
+  Grid(unsigned, unsigned);
+  ~Grid();
+  void loadFile();
   MatrixXi step();
 
 private:
-  const unsigned m_width;
-  const unsigned m_height;
+  unsigned m_width;
+  unsigned m_height;
   MatrixXi m_currentCells;
   MatrixXi m_nextCells;
-  void m_sumNeighbours(unsigned x, unsigned y);
+  void m_sumNeighbours(unsigned, unsigned);
 
 };
 
-void Grid::Grid(unsigned m_width, unsigned m_height){
-  currentCells.resize(m_width, m_height);
-  nextCells.resize(m_width, m_height);
+Grid::Grid(unsigned width, unsigned height){
+
+  m_width = width;
+  m_height = height;
+
+  m_currentCells.resize(m_width, m_height);
+  m_nextCells.resize(m_width, m_height);
 }
 
-int Grid::m_totalNeighbours(unsigned x, unsigned y){
+void Grid::loadFile(){
+
+  std::fstream gridFile;
+
+  gridFile.open("startingValues.dat");
+
+  for (unsigned i=0; i < m_width; ++i){
+    for (unsigned j=0; j < m_height; ++j){
+
+      gridFile >> m_currentCells(i, j);
+
+    }
+  }
+
+  gridFile.close();
+}
+
+int Grid::m_sumNeighbours(unsigned x, unsigned y){
   int total = 0;
 
   //repeating boundaries
   if (x != m_width && x != 0){
-    total += m_totalNeighbours(x - 1, y);
-    total += m_totalNeighbours(x + 1, y);
+    total += m_currentCells(x - 1, y);
+    total += m_currentCells(x + 1, y);
   }
   else if (x == 0){
-    total += m_totalNeighbours(m_width, y);
-    total += m_totalNeighbours(x + 1, y);
+    total += m_currentCells(m_width, y);
+    total += m_currentCells(x + 1, y);
   }
   else if (x == m_width){
-    total += m_totalNeighbours(m_width, y);
-    total += m_totalNeighbours(x + 1, y);
+    total += m_currentCells(m_width, y);
+    total += m_currentCells(x + 1, y);
   }
 
   if (y != m_height && y != 0){
-    total += m_totalNeighbours(x, y + 1);
-    total += m_totalNeighbours(x, y - 1);
+    total += m_currentCells(x, y + 1);
+    total += m_currentCells(x, y - 1);
   }
   else if (y == 0){
-    total += m_totalNeighbours(x, y + 1);
-    total += m_totalNeighbours(x, m_height);
+    total += m_currentCells(x, y + 1);
+    total += m_currentCells(x, m_height);
   }
   else if (y == m_height){
-    y_total += m_totalNeighbours(x, 1);
-    total += m_totalNeighbours(x, y - 1);
+    total += m_currentCells(x, 1);
+    total += m_currentCells(x, y - 1);
   }
 
   return total;
