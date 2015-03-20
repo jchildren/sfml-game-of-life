@@ -2,6 +2,7 @@
 #define GRID_H
 
 #include <fstream>
+#include <iostream>
 #include <eigen3/Eigen/Core>
 
 class Grid {
@@ -9,7 +10,7 @@ public:
   Grid(unsigned, unsigned);
   //~Grid();
   void loadFile();
-  Eigen::MatrixXi step();
+  Eigen::MatrixXi * step();
 
 private:
   unsigned m_width;
@@ -33,12 +34,13 @@ void Grid::loadFile(){
 
   std::fstream gridFile;
 
-  gridFile.open("startingValues.dat");
+  gridFile.open("../data/startingValues.dat");
 
   for (unsigned i=0; i < m_width; ++i){
     for (unsigned j=0; j < m_height; ++j){
 
-      gridFile >> m_currentCells(i, j);
+      //gridFile >> m_currentCells(i, j);
+      m_currentCells(i, j) = 1;
 
     }
   }
@@ -79,7 +81,7 @@ int Grid::m_totalNeighbours(unsigned x, unsigned y){
   return total;
 }
 
-Eigen::MatrixXi Grid::step(){
+Eigen::MatrixXi * Grid::step(){
   for (unsigned i=0; i < m_width; ++i){
     for (unsigned j=0; j < m_height; ++j){
 
@@ -113,7 +115,9 @@ Eigen::MatrixXi Grid::step(){
   }
   m_currentCells = m_nextCells;
 
-  return m_currentCells;
+  Eigen::MatrixXi *cellsPtr = &m_currentCells;
+
+  return cellsPtr;
 
 }
 
