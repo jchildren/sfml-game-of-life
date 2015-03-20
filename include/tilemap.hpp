@@ -10,24 +10,30 @@
 class TileMap : public sf::Drawable, public sf::Transformable{
 public:
 
-  TileMap(sf::Vector2u tileSize, unsigned int screenWidth, unsigned int screenHeight);
-  ~TileMap();
-  void update();
+  TileMap(sf::Vector2u, unsigned int, unsigned int);
+  //~TileMap();
+  void update(Eigen::MatrixXi grid);
 
 private:
   unsigned int m_width;
   unsigned int m_height;
-  sf::Vector2u m_tileSize;
-  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+  sf::Vector2u m_tileVector;
+  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const{
+    // apply the transform
+    states.transform *= getTransform();
+
+    // draw the vertex array
+    target.draw(m_vertices, states);
+  };
   sf::VertexArray m_vertices;
 };
 
-TileMap::TileMap(sf::Vector2u tileSize, unsigned int screenWidth, unsigned int screenHeight){
+TileMap::TileMap(sf::Vector2u tileVector, unsigned int screenWidth, unsigned int screenHeight){
 
-  m_width = screenWidth / tileSize.x;
-  m_height = screenHeight / tileSize.y;
+  m_width = screenWidth / tileVector.x;
+  m_height = screenHeight / tileVector.y;
 
-  m_tileSize = tileSize;
+  m_tileVector = tileVector;
 
   // resize the vertex array to fit the level size
   m_vertices.setPrimitiveType(sf::Quads);
@@ -35,7 +41,7 @@ TileMap::TileMap(sf::Vector2u tileSize, unsigned int screenWidth, unsigned int s
 
 }
 
-void TileMap::update(MatrixXi* grid){
+void TileMap::update(Eigen::MatrixXi grid){
 
   // populate the vertex array, with one quad per tile
   for (unsigned int i = 0; i < m_width; ++i){
@@ -45,10 +51,10 @@ void TileMap::update(MatrixXi* grid){
       sf::Vertex* quad = &m_vertices[(i + j * m_width) * 4];
 
       // define its 4 corners
-      quad[0].position = sf::Vector2f(i * m_tileSize.x, j * m_tileSize.y);
-      quad[1].position = sf::Vector2f((i + 1) * m_tileSize.x, j * m_tileSize.y);
-      quad[2].position = sf::Vector2f((i + 1) * m_tileSize.x, (j + 1) * m_tileSize.y);
-      quad[3].position = sf::Vector2f(i * m_tileSize.x, (j + 1) * m_tileSize.y);
+      quad[0].position = sf::Vector2f(i * m_tileVector.x, j * m_tileVector.y);
+      quad[1].position = sf::Vector2f((i + 1) * m_tileVector.x, j * m_tileVector.y);
+      quad[2].position = sf::Vector2f((i + 1) * m_tileVector.x, (j + 1) * m_tileVector.y);
+      quad[3].position = sf::Vector2f(i * m_tileVector.x, (j + 1) * m_tileVector.y);
 
 
       if (grid(i, j) == 0){
@@ -70,13 +76,5 @@ void TileMap::update(MatrixXi* grid){
   }
 }
 
-
-virtual void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const{
-  // apply the transform
-  states.transform *= getTransform();
-
-  // draw the vertex array
-  target.draw(m_vertices, states);
-}
 
 #endif

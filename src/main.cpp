@@ -9,11 +9,11 @@
 const unsigned screenWidth = 800;
 const unsigned screenHeight = 600;
 
-const unsigned titleSize = 10;
+const unsigned tileSize = 10;
 
-int main {
+int main() {
 
-  grid gameOfLife(80, 60);
+  Grid gameOfLife(80, 60);
 
   sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Also the game");
 

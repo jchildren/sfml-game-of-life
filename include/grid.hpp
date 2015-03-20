@@ -7,16 +7,16 @@
 class Grid {
 public:
   Grid(unsigned, unsigned);
-  ~Grid();
+  //~Grid();
   void loadFile();
-  MatrixXi step();
+  Eigen::MatrixXi step();
 
 private:
   unsigned m_width;
   unsigned m_height;
-  MatrixXi m_currentCells;
-  MatrixXi m_nextCells;
-  void m_sumNeighbours(unsigned, unsigned);
+  Eigen::MatrixXi m_currentCells;
+  Eigen::MatrixXi m_nextCells;
+  int m_totalNeighbours(unsigned, unsigned);
 
 };
 
@@ -46,7 +46,7 @@ void Grid::loadFile(){
   gridFile.close();
 }
 
-int Grid::m_sumNeighbours(unsigned x, unsigned y){
+int Grid::m_totalNeighbours(unsigned x, unsigned y){
   int total = 0;
 
   //repeating boundaries
@@ -79,7 +79,7 @@ int Grid::m_sumNeighbours(unsigned x, unsigned y){
   return total;
 }
 
-MatrixXi Grid::step(){
+Eigen::MatrixXi Grid::step(){
   for (unsigned i=0; i < m_width; ++i){
     for (unsigned j=0; j < m_height; ++j){
 
@@ -95,7 +95,7 @@ MatrixXi Grid::step(){
           m_nextCells(i, j) = 0; //dead
         }
         //survival
-        else (){
+        else {
           m_nextCells(i, j) = 1; //alive
         }
       }
